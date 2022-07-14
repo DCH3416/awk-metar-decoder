@@ -1,5 +1,5 @@
 # awk-metar-decoder
-Metar decoder written in awk, outputs to wxstar format or json
+Metar decoder written in awk, outputs to WeatherSTAR format or json
 
 Usage:
   "awk -f ./metar.awk ./METAR.file"
