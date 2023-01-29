@@ -759,7 +759,7 @@ if (jsenable == 1 || jsenable == 2) {
 		}
 
     # Breaks out at RMK, TODO
-    if ($i ~ /^RMK$/) { i = NF }
+#    if ($i ~ /^RMK$/) { i = NF }
 
     }
 } END {
