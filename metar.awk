@@ -1,5 +1,5 @@
 # The MIT License (MIT)
-# Copyright (c) 2021 DCH3416
+# Copyright (c) 2021-2023 DCH3416, Devon Vroman
 
 # Permission is hereby granted, free of charge, to any person 
 # obtaining a copy of this software and associated documentation 
@@ -598,11 +598,26 @@ if (jsenable == 1 || jsenable == 2) {
 	}
 
 	# Tmp/Dew/Hum + HI/WC group
-	if ($i ~ /^.?..*[0-9]\/[0-9]*.?..$/ && !/....\/..\/../) {
+	if (($i ~ /^[M]?[0-9]{2,3}\/[M]?[0-9]{2,3}$/) || ($i ~ /^[T][0-9]{8}$/)) {
 
-		#swap M char with negative
-		gsub(/M/, "-", $i);
-		split($i, tdx, "/");
+		
+		#Matches more precise AO2 temperture, else use standard metar temps
+		if ($i ~ /^[T][0-9]{8}$/){
+
+			tdx[1] = substr($i,3,3);
+			tdx[1] = tdx[1] * .1;
+			if (substr($i,2,1 == "1")) {tdx[1] = 0 - tdx[1]}
+
+			tdx[2] = substr($i,7,3);
+			tdx[2] = tdx[2] * .1;
+			if (substr($i,6,1 == "1")) {tdx[2] = 0 - tdx[2]}
+		
+		} else {
+			#swap M char with negative
+			gsub(/M/, "-", $i);
+			split($i, tdx, "/");
+		}
+		#Returns tdx[1] and tdx[2]
 
 		rt0 = tdx[1];
 		rd0 = tdx[2];
