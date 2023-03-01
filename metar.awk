@@ -606,11 +606,11 @@ if (jsenable == 1 || jsenable == 2) {
 
 			tdx[1] = substr($i,3,3);
 			tdx[1] = tdx[1] * .1;
-			if (substr($i,2,1 == "1")) {tdx[1] = 0 - tdx[1]}
+			if (substr($i,2,1) == "1") {tdx[1] = 0 - tdx[1]}
 
 			tdx[2] = substr($i,7,3);
 			tdx[2] = tdx[2] * .1;
-			if (substr($i,6,1 == "1")) {tdx[2] = 0 - tdx[2]}
+			if (substr($i,6,1) == "1") {tdx[2] = 0 - tdx[2]}
 		
 		} else {
 			#swap M char with negative
