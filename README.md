@@ -16,6 +16,7 @@ Short output (LO, RC):
   ```awk -f ./metar.awk -v outmode=3 ./METAR.file```
 
 Set units:
+
   ```awk -f ./metar.awk -v setunits=2 ./METAR.file```
   
   Where ```setunits=1``` for US. ```setunits=2``` for international. ```setunits=0``` to passthrough.
