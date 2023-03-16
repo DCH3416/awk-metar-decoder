@@ -82,6 +82,10 @@ if (jsenable == 1 || jsenable == 2) {
 		i++;
 	}
 
+	# Checks if we are past RMK field
+	# If so, continue
+	if (!pastRMK == 1) {
+		
 	# Sky conditions group
 	if ($i ~ /^VV.../ || $i ~ /^CLR/ || $i ~ /^FEW...?.?./ ||
 		$i ~ /^SCT...?.?.?.$/ || $i ~ /^BKN...?.?.?./ ||
@@ -409,7 +413,7 @@ if (jsenable == 1 || jsenable == 2) {
 		if (wcx_fg == 1 && length(obs) == 0) { icoobs = "Fog.png" }
 		if (wcx_br == 1 && length(obs) == 0) { icoobs = "Fog.png" }
 		if (wcx_hz == 1 && length(shobs) == 0) { icoobs = "Haze.png" }
-		
+
 	    # Windy (special)
 	    if (ws0mph > 20) {
 		if (length(obs) != 0) {
@@ -424,6 +428,9 @@ if (jsenable == 1 || jsenable == 2) {
 
             Fwx0 = 1; # Found
         }
+
+			# RMK continue
+		}
 
 	# Winds group
 	if ($i ~ /^[VRB||0-9]?...?...*KT$/) {
@@ -600,7 +607,6 @@ if (jsenable == 1 || jsenable == 2) {
 	# Tmp/Dew/Hum + HI/WC group
 	if (($i ~ /^[M]?[0-9]{2,3}\/[M]?[0-9]{2,3}$/) || ($i ~ /^[T][0-9]{8}$/)) {
 
-		
 		#Matches more precise AO2 temperture, else use standard metar temps
 		if ($i ~ /^[T][0-9]{8}$/){
 
@@ -611,7 +617,7 @@ if (jsenable == 1 || jsenable == 2) {
 			tdx[2] = substr($i,7,3);
 			tdx[2] = tdx[2] * .1;
 			if (substr($i,6,1) == "1") {tdx[2] = 0 - tdx[2]}
-		
+
 		} else {
 			#swap M char with negative
 			gsub(/M/, "-", $i);
@@ -760,6 +766,7 @@ if (jsenable == 1 || jsenable == 2) {
 
     # Breaks out at RMK, TODO
 #    if ($i ~ /^RMK$/) { i = NF }
+    if ($i ~ /^RMK$/) { pastRMK = 1 }
 
     }
 } END {
@@ -783,10 +790,10 @@ if (jsenable == 1 || jsenable == 2) {
 	if (json == 1) {
 		# JSON output
 		printf("{\n");
-		
+
 		# begin data
 		printf("\t\"location\": \"%s\",\n", dispout);
-		
+
 		printf("\t\"observation\": {\n");
 
 			printf("\t\t\"string\": \"");
@@ -876,7 +883,7 @@ if (jsenable == 1 || jsenable == 2) {
 
 
 		printf("\t},\n");
-		
+
 		printf("\t\"humidity\": {\n");
 
 			printf("\t\t\"string\": \"%s\",\n", h0s);
@@ -969,7 +976,7 @@ if (jsenable == 1 || jsenable == 2) {
 				printf("\t\t\"svalue\": \"%3.0f00 %s\",\n", c0, c0u);
 				printf("\t\t\"unlimited\": 0,\n");
 				printf("\t\t\"value\": %0.0f00,\n", c0);
-			} else {	
+			} else {
 				printf("\t\t\"svalue\": \"Unlimited\",\n", c0);
 				printf("\t\t\"unlimited\": 1,\n");
 				printf("\t\t\"value\": %0.0f,\n", c0);
